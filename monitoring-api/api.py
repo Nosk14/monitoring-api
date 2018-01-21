@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from dbmanager import DBManager
 
 app = Flask(__name__)
@@ -21,4 +21,8 @@ def data():
 
 @app.route('/info', methods=['GET'])
 def info():
-    pass
+    zones = db.list_ids()
+    response = {'count': len(zones), 'zones': zones}
+
+    return jsonify(response)
+

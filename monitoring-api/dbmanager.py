@@ -28,4 +28,12 @@ class DBManager:
         pass
 
     def list_ids(self):
-        pass
+        ids = []
+        cursor = self.__db.cursor()
+        try:
+            cursor.execute('SELECT DISTINCT id FROM data ORDER BY id')
+            ids = cursor.fetchall()
+        finally:
+            cursor.close()
+
+        return ids
