@@ -26,3 +26,7 @@ def info():
 
     return jsonify(response)
 
+
+@app.errorhandler(500)
+def error_handler(ex):
+    return jsonify({'error': str(ex)})
