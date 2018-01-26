@@ -3,9 +3,9 @@ import sqlite3
 
 class DBManager:
 
-    def __init__(self):
-        self.NAME = 'monitored_data.db'
-        self.__db = sqlite3.connect(self.NAME)
+    def __init__(self, path):
+        self.path = path
+        self.__db = sqlite3.connect(self.path)
         self.__db.row_factory = sqlite3.Row
         self.__init_db()
 
@@ -33,7 +33,6 @@ class DBManager:
             cursor.close()
 
     def retrieve(self, id, from_date, to_date):
-        data = []
         cursor = self.__db.cursor()
         try:
             cursor.execute("""SELECT time, temperature, humidity 
@@ -48,7 +47,6 @@ class DBManager:
         return data
 
     def list_ids(self):
-        ids = []
         cursor = self.__db.cursor()
         try:
             cursor.execute('SELECT DISTINCT id FROM data ORDER BY id')

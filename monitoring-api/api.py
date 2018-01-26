@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
 from dbmanager import DBManager
+import os
 
 app = Flask(__name__)
-db = DBManager()
+db = DBManager(os.environ.get('DATABASE_PATH', 'monitored_data.db'))
 
 
 @app.route('/data', methods=['GET', 'POST'])
