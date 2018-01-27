@@ -46,7 +46,7 @@ def info():
 
 @app.errorhandler(500)
 def error_handler(ex):
-    return jsonify({'error': str(ex)})
+    return jsonify({'error': str(ex)}), 500
 
 
 def check_date(date):
