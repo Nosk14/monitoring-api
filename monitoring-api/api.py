@@ -13,23 +13,23 @@ def data():
     if request.method == 'GET':
         from_date = request.args.get('from')
         to_date = request.args.get('to')
-        id = request.args.get('id')
+        zone = request.args.get('zone')
 
         check_date(from_date)
         check_date(to_date)
-        check_id(id)
+        check_zone(zone)
 
-        results = db.retrieve(id, from_date, to_date)
+        results = db.retrieve(zone, from_date, to_date)
 
-        response['id'] = id
+        response['zone'] = zone
         response['data'] = results
 
     elif request.method == 'POST':
         json_data = request.get_json()
-        if 'id' not in json_data or 'data' not in json_data:
-            raise Exception('id and data must be specified.')
+        if 'zone' not in json_data or 'data' not in json_data:
+            raise Exception('zone and data must be specified.')
 
-        data = process_data(json_data['id'], json_data['data'])
+        data = process_data(json_data['zone'], json_data['data'])
 
         db.store(data)
 
@@ -38,8 +38,8 @@ def data():
 
 @app.route('/info', methods=['GET'])
 def info():
-    zones = db.list_ids()
-    response = {'count': len(zones), 'zones': zones}
+    zones = db.list_zones()
+    response = {'db': db.path, 'count': len(zones), 'zones': zones}
 
     return jsonify(response)
 
@@ -53,16 +53,16 @@ def check_date(date):
     datetime.strptime(date, "%Y-%m-%dT%H:%M:%S")
 
 
-def check_id(id):
-    if not id:
-        raise Exception("id cannot be empty")
+def check_zone(name):
+    if not name:
+        raise Exception("zone cannot be empty")
 
 
-def process_data(id, data):
-    check_id(id)
+def process_data(zone, data):
+    check_zone(zone)
     ret = []
     for d in data:
         check_date(d['time'])
-        ret.append([id, d.get('time'), d.get('temperature'), d.get('humidity')])
+        ret.append([zone, d.get('time'), d.get('temperature'), d.get('humidity')])
 
     return ret

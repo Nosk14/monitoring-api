@@ -13,11 +13,11 @@ class DBManager:
         cursor = self.__db.cursor()
         try:
             cursor.execute("""CREATE TABLE IF NOT EXISTS data (
-                id STRING NOT NULL,
+                zone STRING NOT NULL,
                 time STRING NOT NULL,
                 temperature REAL,
                 humidity REAL,
-                PRIMARY KEY (id, time)                 
+                PRIMARY KEY (zone, time)                 
                 )""")
         finally:
             cursor.close()
@@ -26,19 +26,19 @@ class DBManager:
         cursor = self.__db.cursor()
         try:
             cursor.executemany("""INSERT INTO 
-            data (id, time, temperature, humidity)
+            data (zone, time, temperature, humidity)
             values (?,?,?,?)""", data)
             self.__db.commit()
         finally:
             cursor.close()
 
-    def retrieve(self, id, from_date, to_date):
+    def retrieve(self, zone, from_date, to_date):
         cursor = self.__db.cursor()
         try:
             cursor.execute("""SELECT time, temperature, humidity 
             FROM data
             WHERE id=? AND time>=? AND time<=?
-            ORDER BY time ASC""", (id, from_date, to_date))
+            ORDER BY time ASC""", (zone, from_date, to_date))
             rows = cursor.fetchall()
             data = [dict(r) for r in rows]
         finally:
@@ -46,12 +46,12 @@ class DBManager:
 
         return data
 
-    def list_ids(self):
+    def list_zones(self):
         cursor = self.__db.cursor()
         try:
-            cursor.execute('SELECT DISTINCT id FROM data ORDER BY id')
-            ids = cursor.fetchall()
+            cursor.execute('SELECT DISTINCT zone FROM data ORDER BY zone')
+            zones = [r[0] for r in cursor.fetchall()]
         finally:
             cursor.close()
 
-        return ids
+        return zones
