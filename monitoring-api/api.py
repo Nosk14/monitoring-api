@@ -7,7 +7,7 @@ app = Flask(__name__)
 db = DBManager(os.environ.get('DATABASE_PATH', 'monitored_data.db'))
 
 
-@app.route('/data', methods=['GET', 'POST'])
+@app.route('/data', methods=['GET', 'PUT'])
 def data():
     response = {'error': None}
     if request.method == 'GET':
@@ -24,7 +24,7 @@ def data():
         response['zone'] = zone
         response['data'] = results
 
-    elif request.method == 'POST':
+    elif request.method == 'PUT':
         json_data = request.get_json()
         if 'zone' not in json_data or 'data' not in json_data:
             raise Exception('zone and data must be specified.')
