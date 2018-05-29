@@ -27,7 +27,7 @@ class DBManager:
             try:
                 cursor.execute("""INSERT INTO 
                 data (zone, time, temperature, humidity)
-                values (?,?,?,?)""", data)
+                values (?,?,?,?)""", *data)
                 db.commit()
             finally:
                 cursor.close()
