@@ -3,10 +3,15 @@ from flask_cors import CORS
 from datetime import datetime
 from dbmanager import DBManager
 import os
+import logging
 
 app = Flask(__name__)
 CORS(app)
 db = DBManager(os.environ.get('DATABASE_PATH', 'monitored_data.db'))
+
+gunicorn_logger = logging.getLogger('gunicorn.error')
+app.logger.handlers = gunicorn_logger.handlers
+app.logger.setLevel(gunicorn_logger.level)
 
 
 @app.route('/data', methods=['GET', 'PUT'])
