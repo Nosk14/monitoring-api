@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from datetime import datetime
 from dbmanager import DBManager
 import os
 
 app = Flask(__name__)
+CORS(app)
 db = DBManager(os.environ.get('DATABASE_PATH', 'monitored_data.db'))
 
 
