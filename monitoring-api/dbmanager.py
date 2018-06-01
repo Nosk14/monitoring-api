@@ -25,9 +25,9 @@ class DBManager:
         with sqlite3.connect(self.path) as db:
             cursor = db.cursor()
             try:
-                cursor.execute("""INSERT INTO 
+                cursor.executemany("""INSERT INTO 
                 data (zone, time, temperature, humidity)
-                values (?,?,?,?)""", *data)
+                values (?,?,?,?)""", data)
                 db.commit()
             finally:
                 cursor.close()
