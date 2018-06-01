@@ -3,4 +3,5 @@ ENV FLASK_APP /usr/local/monitoring-api/api.py
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY monitoring-api /usr/local/monitoring-api/
-CMD flask run --host 0.0.0.0
+WORKDIR /usr/local/monitoring-api/
+CMD gunicorn -w 2 -b 127.0.0.1:5000 api:app
