@@ -10,7 +10,7 @@ CORS(app)
 db = DBManager(os.environ.get('DATABASE_PATH', 'monitored_data.db'))
 
 gunicorn_logger = logging.getLogger('gunicorn.error')
-app.logger.handlers = gunicorn_logger.handlers
+app.logger.handlers.extend(gunicorn_logger.handlers)
 app.logger.setLevel(gunicorn_logger.level)
 
 
